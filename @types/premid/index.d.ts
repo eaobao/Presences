@@ -30,6 +30,20 @@ interface PresenceData {
    * tooltip for the smallImageKey
    */
   smallImageText?: string;
+  /**
+   * Array of buttons, max 2, label is the button text, and url is the link
+   */
+  buttons?: [ButtonData, ButtonData?];
+}
+interface ButtonData {
+  /**
+   * Text for the button
+   */
+  label: string;
+  /**
+   * URL of button link
+   */
+  url: string;
 }
 /**
  * Options that change the behavior of the presence
@@ -43,11 +57,13 @@ interface PresenceOptions {
   /**
    * The `UpdateData` event for both the presence and the iframe
    * will only be fired when the page has fully loaded.
+   * @deprecated since 2.2.4
    */
   injectOnComplete?: boolean;
   /**
    * Empty presence data will show the application (image and name) on
    * the user's profile.
+   * @deprecated since 2.2.4
    */
   appMode?: boolean;
 }
@@ -147,7 +163,7 @@ interface Metadata {
    * A string used to represent the category the presence falls under.
    * @link https://docs.premid.app/dev/presence/metadata#presence-categories
    */
-  category: string;
+  category: "anime" | "games" | "music" | "socials" | "videos" | "other";
   /**
    * Defines whether `iFrames` are used.
    */
@@ -215,6 +231,7 @@ declare class Presence {
   private genericStyle;
   private presenceStyle;
   private encryptionKey;
+  private normalizeLanguageCode;
   /**
    * Create a new Presence
    */
@@ -222,6 +239,7 @@ declare class Presence {
   /**
    * Get the current activity
    * @link https://docs.premid.app/en/dev/presence/class#getactivity
+   * @deprecated since 2.2.4
    */
   getActivity(): PresenceData;
   /**
@@ -241,6 +259,7 @@ declare class Presence {
    * @param trayTitle Tray Title
    * @link https://docs.premid.app/dev/presence/class#settraytitlestring
    * @since 2.0-BETA3
+   * @deprecated since 2.2.3
    */
   setTrayTitle(trayTitle?: string): void;
   /**
@@ -249,9 +268,13 @@ declare class Presence {
    * @param language Language
    * @link https://docs.premid.app/dev/presence/class#getstringsobject
    */
-  getStrings(strings: Object, language?: string): Promise<any>;
+  getStrings<
+    T extends {
+      [K: string]: string;
+    }
+  >(strings: T, language?: string): Promise<T>;
   /**
-   * Get letiables from the actual site
+   * Get letiables from the actual site *IMPORTANT: This function can make site lagging when it has been used too many times*
    * @param {Array} letiables Array of letiable names to get
    * @example let pagelet = getPageletiable('pagelet') -> "letiable content"
    * @link https://docs.premid.app/presence-development/coding/presence-class#getpageletiable-string
@@ -358,6 +381,10 @@ declare class Presence {
    */
   on(eventName: "UpdateData" | "iFrameData", callback: Function): void;
 }
+/**
+ * Minimum amount of time in ms between slide updates
+ */
+declare const MIN_SLIDE_TIME: number;
 /**
  * Represents a slideshow slide
  */

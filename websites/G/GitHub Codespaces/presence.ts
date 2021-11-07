@@ -363,16 +363,19 @@ const presence = new Presence({
     "/^pkginfo$/": { image: "manifest" },
     "/^mime\\.types$/i": { image: "manifest" },
     "/^METADATA\\.pb$/": { image: "manifest" },
-    "/[\\/\\\\](?:magic[\\/\\\\]Magdir|file[\\/\\\\]magic)[\\/\\\\][-.\\w]+$/i": {
-      image: "manifest"
-    },
-    "/(\\\\|\\/)dev[-\\w]+\\1(?:[^\\\\\\/]+\\1)*(?!DESC|NOTES)(?:[A-Z][-A-Z]*)(?:\\.in)?$/": {
-      image: "manifest"
-    },
+    "/[\\/\\\\](?:magic[\\/\\\\]Magdir|file[\\/\\\\]magic)[\\/\\\\][-.\\w]+$/i":
+      {
+        image: "manifest"
+      },
+    "/(\\\\|\\/)dev[-\\w]+\\1(?:[^\\\\\\/]+\\1)*(?!DESC|NOTES)(?:[A-Z][-A-Z]*)(?:\\.in)?$/":
+      {
+        image: "manifest"
+      },
     "lib/icons/.icondb.js": { image: "manifest" },
-    "/\\.git[\\/\\\\](.*[\\/\\\\])?(HEAD|ORIG_HEAD|packed-refs|logs[\\/\\\\](.+[\\/\\\\])?[^\\/\\\\]+)$/": {
-      image: "manifest"
-    },
+    "/\\.git[\\/\\\\](.*[\\/\\\\])?(HEAD|ORIG_HEAD|packed-refs|logs[\\/\\\\](.+[\\/\\\\])?[^\\/\\\\]+)$/":
+      {
+        image: "manifest"
+      },
     "/\\.(md|mdown|markdown|mkd|mkdown|mdwn|mkdn|rmd|ron|pmd)$/i": {
       image: "markdown"
     },
@@ -455,13 +458,15 @@ const presence = new Presence({
     "/^wscript$/": { image: "python" },
     "/\\.(r|Rprofile|rsx|rd)$/i": { image: "r" },
     ".re": { image: "reasonml" },
-    "/\\.(rb|ru|ruby|erb|gemspec|god|mspec|pluginspec|podspec|rabl|rake|opal)$/i": {
-      image: "ruby"
-    },
+    "/\\.(rb|ru|ruby|erb|gemspec|god|mspec|pluginspec|podspec|rabl|rake|opal)$/i":
+      {
+        image: "ruby"
+      },
     "/^\\.?(irbrc|gemrc|pryrc|ruby-(gemset|version))$/i": { image: "ruby" },
-    "/^(Appraisals|(Rake|[bB]uild|Cap|Danger|Deliver|Fast|Guard|Jar|Maven|Pod|Puppet|Snap)file(\\.lock)?)$/": {
-      image: "ruby"
-    },
+    "/^(Appraisals|(Rake|[bB]uild|Cap|Danger|Deliver|Fast|Guard|Jar|Maven|Pod|Puppet|Snap)file(\\.lock)?)$/":
+      {
+        image: "ruby"
+      },
     "/\\.(jbuilder|rbuild|rb[wx]|builder)$/i": { image: "ruby" },
     "/^rails$/": { image: "ruby" },
     ".watchr": { image: "ruby" },
@@ -470,21 +475,24 @@ const presence = new Presence({
     ".scss": { image: "scss" },
     ".sass": { image: "scss" },
     "/\\.(sh|rc|bats|bash|tool|install|command)$/i": { image: "shell" },
-    "/^(\\.?bash(rc|[-_]?(profile|login|logout|history|prompt))|_osc|config|install-sh|PKGBUILD)$/i": {
-      image: "shell"
-    },
+    "/^(\\.?bash(rc|[-_]?(profile|login|logout|history|prompt))|_osc|config|install-sh|PKGBUILD)$/i":
+      {
+        image: "shell"
+      },
     "/\\.(ksh|mksh|pdksh)$/i": { image: "shell" },
     ".sh-session": { image: "shell" },
-    "/\\.zsh(-theme|_history)?$|^\\.?(antigen|zpreztorc|zlogin|zlogout|zprofile|zshenv|zshrc)$/i": {
-      image: "shell"
-    },
+    "/\\.zsh(-theme|_history)?$|^\\.?(antigen|zpreztorc|zlogin|zlogout|zprofile|zshenv|zshrc)$/i":
+      {
+        image: "shell"
+      },
     "/\\.fish$|^\\.fishrc$/i": { image: "shell" },
     "/^\\.?(login|profile)$/": { image: "shell" },
     ".inputrc": { image: "shell" },
     ".tmux": { image: "shell" },
-    "/^(configure|config\\.(guess|rpath|status|sub)|depcomp|libtool|compile)$/": {
-      image: "shell"
-    },
+    "/^(configure|config\\.(guess|rpath|status|sub)|depcomp|libtool|compile)$/":
+      {
+        image: "shell"
+      },
     "/^\\/(private\\/)?etc\\/([^\\/]+\\/)*(profile$|nanorc$|rc\\.|csh\\.)/i": {
       image: "shell"
     },
@@ -543,9 +551,10 @@ const presence = new Presence({
     ".wat": { image: "wasm" },
     ".wast": { image: "wasm" },
     ".wasm": { image: "wasm" },
-    "/webpack(\\.dev|\\.development|\\.prod|\\.production)?\\.config(\\.babel)?\\.(js|jsx|coffee|ts|json|json5|yaml|yml)/i": {
-      image: "webpack"
-    },
+    "/webpack(\\.dev|\\.development|\\.prod|\\.production)?\\.config(\\.babel)?\\.(js|jsx|coffee|ts|json|json5|yaml|yml)/i":
+      {
+        image: "webpack"
+      },
     ".xml": { image: "xml" },
     "/\\.ya?ml$/i": { image: "yaml" },
     "/^yarn(\\.lock)?$/i": { image: "yarn" },
@@ -575,11 +584,19 @@ presence.on("UpdateData", async () => {
     data.details = "Preparing a codespace...";
     delete data.smallImageKey;
 
-    if (document.querySelector(".vso-button"))
+    if (document.querySelector(".vso-splash-screen__button"))
       data.details = "Inactive Codespace";
     // Idle/Start Screen
   } else if (activeTab && editorMode) {
-    const scmTab = document.getElementById("status.scm"),
+    const scmTabs = Array.from(
+        document.querySelectorAll("#status\\.scm")
+      ).reverse(),
+      scmTab = scmTabs.find(
+        (scmTab) => scmTab && scmTab.hasAttribute("aria-label")
+      ),
+      workspace = scmTab
+        ? scmTab.getAttribute("aria-label").split("(Git)")[0]
+        : null,
       filename = activeTab.getAttribute("data-resource-name"),
       filepath = activeTab.getAttribute("title"),
       syntaxMode = editorMode.getAttribute("aria-label").toLowerCase(),
@@ -609,17 +626,10 @@ presence.on("UpdateData", async () => {
         /%ext%/g,
         (largeImageKey ? largeImageKey.image : "txt").toUpperCase()
       )
-      .replace(
-        /%workspace%/g,
-        scmTab && scmTab.hasAttribute("title")
-          ? scmTab.getAttribute("title").split(" (Git)")[0]
-          : "N/A"
-      )
+      .replace(/%workspace%/g, workspace || "N/A")
       .replace(
         /%workspaceOrFolder%/g,
-        scmTab && scmTab.hasAttribute("title")
-          ? scmTab.getAttribute("title").split(" (Git)")[0]
-          : filepath.split("/").reverse()[1]
+        workspace || filepath.split("/").reverse()[1]
       );
     data.state = (await presence.getSetting("state"))
       .replace(/%file%/g, filename)
@@ -629,24 +639,17 @@ presence.on("UpdateData", async () => {
         /%ext%/g,
         (largeImageKey ? largeImageKey.image : "txt").toUpperCase()
       )
-      .replace(
-        /%workspace%/g,
-        scmTab && scmTab.hasAttribute("title")
-          ? scmTab.getAttribute("title").split(" (Git)")[0]
-          : "N/A"
-      )
+      .replace(/%workspace%/g, workspace || "N/A")
       .replace(
         /%workspaceOrFolder%/g,
-        scmTab && scmTab.hasAttribute("title")
-          ? scmTab.getAttribute("title").split(" (Git)")[0]
-          : filepath.split("/").reverse()[1]
+        workspace || filepath.split("/").reverse()[1]
       );
   } else if (!editorMode) {
     data.largeImageKey = "idle";
     data.details = "Idling";
   }
 
-  if (data.largeImageKey === null) {
+  if (!data.largeImageKey) {
     presence.setTrayTitle();
     presence.setActivity();
   } else presence.setActivity(data);

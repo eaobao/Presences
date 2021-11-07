@@ -1,5 +1,5 @@
 {
-  "$schema": "https://schemas.premid.app/metadata/1.0",
+  "$schema": "https://schemas.premid.app/metadata/1.5",
   "author": {
     "name": "Snazzah",
     "id": "158049329150427136"
@@ -7,15 +7,16 @@
   "contributors": [
     {
       "name": "Cem",
-      "id": "708680386980479036"
+      "id": "767790973736452107"
     }
   ],
   "url": "pylon.bot",
   "description": {
-    "en": "Build and deploy Discord bots in minutes using our simple online studio."
+    "en": "Build and deploy Discord bots in minutes using our simple online studio.",
+    "nl": "Bouw en implementeer Discord-bots in enkele minuten met behulp van onze eenvoudige online studio."
   },
   "service": "Pylon",
-  "version": "2.0.1",
+  "version": "2.0.6",
   "logo": "https://i.imgur.com/VrYlcrQ.png",
   "thumbnail": "https://i.imgur.com/hPkh9Br.png",
   "color": "#3961DD",
